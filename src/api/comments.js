@@ -2,10 +2,10 @@ const BASE = import.meta.env.VITE_URL_BASE;
 
 
 export const getComments = () => 
-    fetch(`${BASE}/comments/`).then((response) => response.json());
+    fetch(`${BASE}/comments`).then((response) => response.json());
 
 export const addComment = (text) =>
-    fetch(`${BASE}/comments/`, {
+    fetch(`${BASE}/comments`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -15,12 +15,12 @@ export const addComment = (text) =>
     );
 
 export const deleteComment = (id) =>
-    fetch(`${BASE}/comments/${id}/`, {
+    fetch(`${BASE}/comments/${id}`, {
         method: 'DELETE',
     }).then((response) => response.json());
 
 export const editComment = (id, text) =>
-    fetch(`${BASE}/comments/${id}/`, {
+    fetch(`${BASE}/comments/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
