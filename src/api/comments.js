@@ -14,7 +14,7 @@ export const addComment = (text, images = []) =>
 export const deleteComment = (id) =>
     fetch(`${BASE}/comments/${id}`, {
         method: 'DELETE',
-    }).then((response) => response.json());
+    }); 
 
 export const editComment = (id, text) =>
     fetch(`${BASE}/comments/${id}`, {
