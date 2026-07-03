@@ -36,4 +36,3 @@ App running at `http://localhost:5173`
 - Like/unlike toggle endpoint
 - Real authentication (JWT)
 - Migrate to PostgreSQL
-- Deploy backend on Railway, frontend on Vercel
