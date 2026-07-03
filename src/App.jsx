@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Topbar from './components/TopBar'
 import CommentsPage from './pages/CommentsPage'
 import DashboardPage from './pages/DashboardPage'
@@ -15,8 +16,11 @@ export default function App() {
         role={role}
         setRole={setRole}
       />
-      {page === 'dashboard' && <DashboardPage />}
-      {page === 'comments'  && <CommentsPage role={role} />}
+      <Routes>
+        <Route path="/" element={<Navigate to="/comments" replace />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/comments"  element={<CommentsPage role={role} />} />
+      </Routes>
     </div>
   )
 }

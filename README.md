@@ -36,3 +36,5 @@ App running at `http://localhost:5173`
 - Like/unlike toggle endpoint
 - Real authentication (JWT)
 - Migrate to PostgreSQL
+
+The frontend is deployed on a free istance of Vercel: https://bobyard-frontend.vercel.app/

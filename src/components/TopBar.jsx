@@ -1,17 +1,20 @@
 import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 const NAV = [
-  { text: 'Dashboard', page: 'dashboard' },
-  { text: 'Comments',  page: 'comments' },
-  { text: 'Documents', page: null },
-  { text: 'Team',      page: null },
+  { text: 'Dashboard', path: '/dashboard' },
+  { text: 'Comments',  path: '/comments' },
+  { text: 'Documents', path: null },
+  { text: 'Team',      path: null },
 ]
 
-export default function Topbar({ activePage, onNavigate, role, setRole }) {
+export default function Topbar({ role, setRole }) {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const handleNavigate = (page) => {
-    if (page) { onNavigate(page); setMobileMenuOpen(false) }
+  const handleNavigate = (path) => {
+    if (path) { navigate(path); setMobileMenuOpen(false) }
   }
 
   return (
@@ -34,32 +37,30 @@ export default function Topbar({ activePage, onNavigate, role, setRole }) {
           <span style={{ fontSize: 15, fontWeight: 700, color: '#111', letterSpacing: '-0.02em' }}>Bobyard</span>
         </div>
 
-        {/* Nav links — solo desktop */}
+        {/* Nav — desktop */}
         <nav className="hidden md:flex" style={{ alignItems: 'center', gap: 2, flex: 1 }}>
           {NAV.map(item => (
-            <button key={item.text} onClick={() => handleNavigate(item.page)} style={{
+            <button key={item.text} onClick={() => handleNavigate(item.path)} style={{
               padding: '6px 14px', borderRadius: 8, border: 'none',
-              fontSize: 13, fontWeight: 500, cursor: item.page ? 'pointer' : 'default',
+              fontSize: 13, fontWeight: 500,
+              cursor: item.path ? 'pointer' : 'default',
               fontFamily: 'Inter, sans-serif',
-              background: activePage === item.page ? '#f4f4f4' : 'transparent',
-              color: activePage === item.page ? '#111' : item.page ? '#666' : '#ccc',
+              background: location.pathname === item.path ? '#f4f4f4' : 'transparent',
+              color: location.pathname === item.path ? '#111' : item.path ? '#666' : '#ccc',
             }}>
               {item.text}
             </button>
           ))}
         </nav>
 
-        {/* Spacer su mobile */}
         <div className="flex md:hidden" style={{ flex: 1 }} />
 
-        {/* Right side */}
+        {/* Right */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-          {/* Search — solo desktop */}
           <button className="hidden md:flex" style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #F0F0F0', background: '#fff', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#888' }}>
             <i className="ti ti-search" style={{ fontSize: 15 }} />
           </button>
 
-          {/* Role switcher */}
           <div style={{ display: 'flex', background: '#f4f4f4', borderRadius: 8, padding: 3, gap: 2 }}>
             {['Admin', 'User'].map(r => (
               <button key={r} onClick={() => setRole(r.toLowerCase())} style={{
@@ -75,23 +76,18 @@ export default function Topbar({ activePage, onNavigate, role, setRole }) {
             ))}
           </div>
 
-          {/* Avatar */}
           <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#111', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 600 }}>
             A
           </div>
 
-          {/* Hamburger — solo mobile */}
-          <button
-            className="flex md:hidden"
-            onClick={() => setMobileMenuOpen(o => !o)}
-            style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #F0F0F0', background: '#fff', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#888' }}
-          >
+          <button className="flex md:hidden" onClick={() => setMobileMenuOpen(o => !o)}
+            style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #F0F0F0', background: '#fff', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#888' }}>
             <i className={`ti ${mobileMenuOpen ? 'ti-x' : 'ti-menu-2'}`} style={{ fontSize: 16 }} />
           </button>
         </div>
       </header>
 
-      {/* Mobile menu dropdown */}
+      {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden" style={{
           position: 'sticky', top: 56, zIndex: 9,
@@ -99,12 +95,12 @@ export default function Topbar({ activePage, onNavigate, role, setRole }) {
           padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 2,
         }}>
           {NAV.map(item => (
-            <button key={item.text} onClick={() => handleNavigate(item.page)} style={{
+            <button key={item.text} onClick={() => handleNavigate(item.path)} style={{
               padding: '10px 14px', borderRadius: 8, border: 'none', textAlign: 'left',
-              fontSize: 14, fontWeight: 500, cursor: item.page ? 'pointer' : 'default',
+              fontSize: 14, fontWeight: 500, cursor: item.path ? 'pointer' : 'default',
               fontFamily: 'Inter, sans-serif',
-              background: activePage === item.page ? '#f4f4f4' : 'transparent',
-              color: activePage === item.page ? '#111' : item.page ? '#444' : '#ccc',
+              background: location.pathname === item.path ? '#f4f4f4' : 'transparent',
+              color: location.pathname === item.path ? '#111' : item.path ? '#444' : '#ccc',
             }}>
               {item.text}
             </button>
