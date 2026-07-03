@@ -1,30 +1,30 @@
-import AddComment from "./AddComment";
-import CommentCard from "./CommentCard";
+import AddComment from './AddComment'
+import CommentCard from './CommentCard'
 
-export default function CommentFeed({comments, loading, error, role, onAdd, onUpdate, onDelete}) {
-    return (
-        <div className="space-y-6 overflow-y-auto p-6">
-            {role === 'admin' && <AddComment onAdd={onAdd} />}
+export default function CommentFeed({ comments, loading, error, role, onAdd, onUpdate, onDelete }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {role === 'admin' && <AddComment onAdd={onAdd} />}
 
-            {loading && 
-                <p className="text-[13px] color-[#999] text-center px-[40px]">Loading...</p>
-            }
+      {loading && (
+        <p style={{ fontSize: 13, color: '#999', textAlign: 'center', padding: '40px 0' }}>Loading…</p>
+      )}
 
-            {error && 
-                <div className="bg-[#FEE2E2] border-color-[#FECACA] rounded-md border text-sm text-[#991B1B]">
-                    Error: {error}
-                </div>
-            }
-
-            {!loading && !error &&comments.map(comment => (
-                <CommentCard
-                    key={comment.id}
-                    comment={comment}
-                    role={role}
-                    onDelete={onDelete}
-                    onUpdate={onUpdate}
-                />
-            ))}
+      {error && (
+        <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: '#991B1B' }}>
+          {error}
         </div>
-    );
+      )}
+
+      {!loading && !error && comments.map(comment => (
+        <CommentCard
+          key={comment.id}
+          comment={comment}
+          role={role}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+        />
+      ))}
+    </div>
+  )
 }

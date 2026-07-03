@@ -1,34 +1,116 @@
-export default function Topbar({ title, onMenuClick }) {
-  return (
-    <div style={{
-      height: 52, padding: '0 20px', borderBottom: '1px solid #E0D8CC',
-      background: '#F5F0E8', display: 'flex', alignItems: 'center',
-      justifyContent: 'space-between', flexShrink: 0,
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <button onClick={onMenuClick} className="lg:hidden" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#111' }}>
-          <i className="ti ti-menu-2" style={{ fontSize: 20 }} aria-hidden="true" />
-        </button>
-        <span style={{ fontSize: 14, fontWeight: 600, color: '#111' }}>{title}</span>
-      </div>
-      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-        <GhostBtn icon="ti-search" />
-        <GhostBtn icon="ti-adjustments-horizontal" label="Filter" labelClass="hidden sm:inline" />
-      </div>
-    </div>
-  )
-}
+import { useState } from 'react'
 
-function GhostBtn({ icon, label, labelClass }) {
+const NAV = [
+  { text: 'Dashboard', page: 'dashboard' },
+  { text: 'Comments',  page: 'comments' },
+  { text: 'Documents', page: null },
+  { text: 'Team',      page: null },
+]
+
+export default function Topbar({ activePage, onNavigate, role, setRole }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const handleNavigate = (page) => {
+    if (page) { onNavigate(page); setMobileMenuOpen(false) }
+  }
+
   return (
-    <button style={{
-      height: 30, padding: '0 10px', borderRadius: 5, border: 'none',
-      background: 'transparent', fontSize: 14, fontWeight: 500,
-      color: '#666', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
-      fontFamily: 'Inter, sans-serif',
-    }}>
-      <i className={`ti ${icon}`} aria-hidden="true" style={{ fontSize: 16 }} />
-      {label && <span className={labelClass}>{label}</span>}
-    </button>
+    <>
+      <header style={{
+        height: 56, background: '#fff', borderBottom: '1px solid #F0F0F0',
+        display: 'flex', alignItems: 'center', padding: '0 16px',
+        gap: 16, position: 'sticky', top: 0, zIndex: 10, flexShrink: 0,
+      }}>
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <div style={{ width: 28, height: 28, background: '#ef4000', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg viewBox="0 0 18 18" fill="none" width={16} height={16}>
+              <rect x="2" y="2" width="6" height="6" rx="1.5" fill="#fff"/>
+              <rect x="10" y="2" width="6" height="6" rx="1.5" fill="#fff"/>
+              <rect x="2" y="10" width="6" height="6" rx="1.5" fill="#fff"/>
+              <rect x="10" y="10" width="3" height="6" rx="1" fill="#fff"/>
+            </svg>
+          </div>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#111', letterSpacing: '-0.02em' }}>Bobyard</span>
+        </div>
+
+        {/* Nav links — solo desktop */}
+        <nav className="hidden md:flex" style={{ alignItems: 'center', gap: 2, flex: 1 }}>
+          {NAV.map(item => (
+            <button key={item.text} onClick={() => handleNavigate(item.page)} style={{
+              padding: '6px 14px', borderRadius: 8, border: 'none',
+              fontSize: 13, fontWeight: 500, cursor: item.page ? 'pointer' : 'default',
+              fontFamily: 'Inter, sans-serif',
+              background: activePage === item.page ? '#f4f4f4' : 'transparent',
+              color: activePage === item.page ? '#111' : item.page ? '#666' : '#ccc',
+            }}>
+              {item.text}
+            </button>
+          ))}
+        </nav>
+
+        {/* Spacer su mobile */}
+        <div className="flex md:hidden" style={{ flex: 1 }} />
+
+        {/* Right side */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          {/* Search — solo desktop */}
+          <button className="hidden md:flex" style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #F0F0F0', background: '#fff', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#888' }}>
+            <i className="ti ti-search" style={{ fontSize: 15 }} />
+          </button>
+
+          {/* Role switcher */}
+          <div style={{ display: 'flex', background: '#f4f4f4', borderRadius: 8, padding: 3, gap: 2 }}>
+            {['Admin', 'User'].map(r => (
+              <button key={r} onClick={() => setRole(r.toLowerCase())} style={{
+                padding: '5px 10px', borderRadius: 6, border: 'none',
+                fontSize: 12, fontWeight: 500, cursor: 'pointer',
+                fontFamily: 'Inter, sans-serif',
+                background: role === r.toLowerCase() ? '#fff' : 'transparent',
+                color: role === r.toLowerCase() ? '#111' : '#888',
+                boxShadow: role === r.toLowerCase() ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+              }}>
+                {r}
+              </button>
+            ))}
+          </div>
+
+          {/* Avatar */}
+          <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#111', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 600 }}>
+            A
+          </div>
+
+          {/* Hamburger — solo mobile */}
+          <button
+            className="flex md:hidden"
+            onClick={() => setMobileMenuOpen(o => !o)}
+            style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #F0F0F0', background: '#fff', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#888' }}
+          >
+            <i className={`ti ${mobileMenuOpen ? 'ti-x' : 'ti-menu-2'}`} style={{ fontSize: 16 }} />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile menu dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden" style={{
+          position: 'sticky', top: 56, zIndex: 9,
+          background: '#fff', borderBottom: '1px solid #F0F0F0',
+          padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 2,
+        }}>
+          {NAV.map(item => (
+            <button key={item.text} onClick={() => handleNavigate(item.page)} style={{
+              padding: '10px 14px', borderRadius: 8, border: 'none', textAlign: 'left',
+              fontSize: 14, fontWeight: 500, cursor: item.page ? 'pointer' : 'default',
+              fontFamily: 'Inter, sans-serif',
+              background: activePage === item.page ? '#f4f4f4' : 'transparent',
+              color: activePage === item.page ? '#111' : item.page ? '#444' : '#ccc',
+            }}>
+              {item.text}
+            </button>
+          ))}
+        </div>
+      )}
+    </>
   )
 }

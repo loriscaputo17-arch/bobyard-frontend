@@ -1,53 +1,55 @@
-import {useState, useEffect} from 'react';
-import {addComment} from '../api/comments';
+import { useState } from 'react'
+import { addComment } from '../api/comments'
 
-export default function AddComment({onAdd}) {
-    const [text, setText] = useState('');
-    const [loading, setLoading] = useState(false);
+export default function AddComment({ onAdd }) {
+  const [text, setText] = useState('')
+  const [loading, setLoading] = useState(false)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!text.trim()) { return; }
-        setLoading(true);
-        const newComment = await addComment(text.trim());
-        onAdd(newComment);
-        setText('');
-        setLoading(false);
-    };
+  const handleSubmit = async () => {
+    if (!text.trim()) return
+    setLoading(true)
+    const newComment = await addComment(text.trim())
+    onAdd(newComment)
+    setText('')
+    setLoading(false)
+  }
 
-    return (
-        <div className='bg-[#e5e5e5] rounded-2xl p-5 shadow-sm'>
-            <div className='flex gap-3'>
-                <Avatar initials="A" bg="#111" color="#F5F0E8" />
-                <div className='flex-1'>
-                    <textarea
-                        className='w-full resize-none border-none bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:ring-0 outline-none'
-                        rows={3}
-                        placeholder="Write a comment..."
-                        value={text}
-                        onKeyDown={e => {if (e.key === 'Enter' && e.metaKey) handleSubmit();}}
-                        onChange={(e) => setText(e.target.value)}
-                    />
-                    <div className='flex justify-end mt-2'>
-                        <button
-                            type="button"
-                            className='px-5 py-3 bg-black text-white text-sm rounded-lg font-semibold disabled:hover:bg-black hover:bg-white disabled:hover:text-white hover:text-black disabled:cursor-not-allowed cursor-pointer transition-colors disabled:opacity-50'
-                            onClick={handleSubmit}
-                            disabled={loading || !text.trim()}
-                        >
-                            {loading ? 'Adding...' : 'Add Comment'}
-                        </button>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div style={{ background: '#fff', borderRadius: 16, padding: '16px 20px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1px solid #F0F0F0' }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#111', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, flexShrink: 0 }}>
+          A
         </div>
-    );
-}
-
-export function Avatar({initials, bg, color}) {
-    return (
-        <div style={{width: 40, height: 40, borderRadius: '50%', backgroundColor: bg, color: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold'}}>
-            {initials}
+        <div style={{ flex: 1 }}>
+          <textarea
+            value={text}
+            onChange={e => setText(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter' && e.metaKey) handleSubmit() }}
+            rows={3}
+            placeholder="Write a comment…"
+            style={{
+              width: '100%', border: 'none', outline: 'none', resize: 'none',
+              fontSize: 14, color: '#111', fontFamily: 'Inter, sans-serif',
+              lineHeight: 1.6, background: 'transparent',
+            }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8, borderTop: '1px solid #F5F5F5', paddingTop: 10 }}>
+            <button
+              onClick={handleSubmit}
+              disabled={!text.trim() || loading}
+              style={{
+                padding: '8px 18px', borderRadius: 8, border: 'none',
+                background: text.trim() ? '#111' : '#F0F0F0',
+                color: text.trim() ? '#fff' : '#999',
+                fontSize: 13, fontWeight: 600, cursor: text.trim() ? 'pointer' : 'not-allowed',
+                fontFamily: 'Inter, sans-serif', transition: 'all 0.15s',
+              }}
+            >
+              {loading ? 'Posting…' : 'Post'}
+            </button>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }

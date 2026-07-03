@@ -1,16 +1,39 @@
-# React + Vite
+# Bobyard Comments
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Comment system with admin/user roles, built with FastAPI + React.
 
-Currently, two official plugins are available:
+## Stack
+- **Backend**: FastAPI, SQLAlchemy, SQLite
+- **Frontend**: React, Vite, Tailwind CSS
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setup
 
-## React Compiler
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+App running at `http://localhost:5173`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## API Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/comments` | List all comments |
+| POST | `/comments` | Add a comment (Admin) |
+| PATCH | `/comments/{id}` | Edit comment text |
+| DELETE | `/comments/{id}` | Delete a comment |
 
-## Expanding the Oxlint configuration
+## Features
+- List, add, edit, delete comments
+- Admin / User role switcher
+- Images with fullscreen lightbox
+- Responsive layout with mobile drawer
+- Optimistic UI updates
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## What I'd add with more time
+- Reply threading (`parent_id` on Comment model)
+- Like/unlike toggle endpoint
+- Real authentication (JWT)
+- Migrate to PostgreSQL
+- Deploy backend on Railway, frontend on Vercel
